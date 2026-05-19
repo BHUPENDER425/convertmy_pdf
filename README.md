@@ -14,6 +14,18 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
+---
+
+## Notes about pdf.worker (pdfjs)
+
+This project uses `pdfjs-dist` to render PDF pages in-browser. To avoid runtime errors when the PDF worker can't be fetched from a CDN, the build step copies a local worker file into `public/`.
+
+- A small script `scripts/copy-pdf-worker.js` runs on `postinstall` and will copy the worker from `node_modules/pdfjs-dist/build/pdf.worker.min.mjs` to `public/pdf.worker.min.mjs`.
+- If you already have `node_modules` installed, run `node ./scripts/copy-pdf-worker.js` to copy the worker manually.
+- The app prefers the local worker at `/pdf.worker.min.mjs` and falls back to the CDN worker `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/<version>/pdf.worker.min.js` if the local file isn't available.
+
+This makes PDF features more robust in dev and production where CDN fetches may fail or be blocked.
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
